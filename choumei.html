@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no,minimal-ui">
+	<title>Document</title>
+</head>
+<link rel="stylesheet" href="css/swiper-3.4.2.min.css">
+<link rel="stylesheet" href="css/choumei.css">
+<script>
+(function() {
+	var html = document.documentElement;
+	var width = html.clientWidth;
+	html.style.fontSize = width / 12.42 + 'px';
+})();
+</script>
+<style>
+body {
+	margin: 0;
+	width: 100%;
+	height: 100%;
+	background: url(img/shouye_nvsheng_bg.png);
+
+}
+ul {
+	list-style: none;
+	padding:0;
+	margin: 0;
+}
+.like {
+	position: absolute;
+	bottom: 10%;
+	right: 8%;
+	width: 1.2rem;
+	height: 1.2rem;
+	font-size: .36rem;
+	line-height: 1.2rem;
+	text-align: center;
+	border-radius: 50%;
+	color: #fff;
+	background: #f61740;
+}
+.like span,
+.like strong {
+	position: absolute;
+	top: 10px;
+	left: -2rem;
+	width: .6rem;
+	height: .6rem;
+	background: url(./img/like.svg);
+	background-size: .6rem auto;
+	border-radius: 50%;
+}
+.like strong {
+	top: 6px;
+	left: -1.5rem;
+}
+</style>
+<body>
+	<header></header>
+	<div class="swiper-container">
+		<ul class="swiper-wrapper">
+			
+		</ul>
+	</div>
+	<nav class="nav">
+		
+	</nav>
+	<footer></footer>
+	<div class="like">
+<!-- 		<span></span>
+		<span></span> -->
+		点赞
+	</div>
+</body>
+<script src="js/jquery-1.11.2.js"></script>
+<script src="js/swiper-3.4.2.min.js"></script>
+<script>
+// document.addEventListener('touchstart', function(e) {
+// 	e.preventDefault();
+// });
+
+var images = ['img/shouye_nvsheng_haircare_five.png','img/shouye_nvsheng_hairdye_four.png','img/shouye_nvsheng_hairperm_three.png','img/shouye_nvsheng_packeage_six.png','img/shouye_nvsheng_washblow_one.png','img/shouye_nvsheng_washcutblow_two.png'];
+var navs = ['护','染','烫','套','洗','剪'];
+
+(function() {
+	$.each(images,function(index,item) {
+		$('<li>').attr('class','swiper-slide').html($('<img>').attr('src',images[index])).appendTo($('.swiper-wrapper'));
+
+		// $('<a>').attr('href','javascript:;').appendTo($('.nav'));
+	})
+	
+})();
+
+var mySwiper = new Swiper ('.swiper-container', {
+	direction: 'horizontal',
+	autoplay: 3000,
+	speed: 800,
+	loop: true,//无缝
+	centeredSlides: true,//居中显示
+	initialSlide: 0,//页面刚进来显示第几个
+	slidesPerView: 'auto',//3个图片在一起
+    paginationClickable: true,//分页器可以点
+    spaceBetween: 20,//图片间的空隙
+
+    shortSwipes: false,//是否支持短而快的滑动切换
+
+    autoplayDisableOnInteraction: false,//用户操作滑屏或者点击分页器之后，是否继续autoplay ，true为停止，false为继续
+
+	// 如果需要分页器
+	pagination: '.nav',
+	paginationType: 'bullets',
+	//自定义分页器
+	paginationBulletRender: function(swiper,index,classname) {
+		return "<a href='javascript:;' class="+ classname +">"+ navs[index] +"</a>";
+	},
+
+	watchSlidesProgress: true,
+	//自定义滑动效果
+	onProgress: function(swiper,p) {
+		$.each(swiper.slides,function(index) {
+			swiper.slides[index].style.transform = "scale("+ (1 - Math.min(Math.abs(.2 * swiper.slides[index].progress),1)) +")";
+			swiper.slides[index].style.opacity = 1 - Math.min(Math.abs(swiper.slides[index].progress/2),1);
+			// console.log(swiper.progress,swiper.slides[index].progress);
+			//p形参是 swiper.progress
+		})
+		/*scale为什么要这样弄呢，上面这个console中的值是6到-10之间的，所以
+		要做成效果上的这个(显示这个为scale: 1;progress: 0，旁边两个progress是 1 和 -1 。也就是 1 0 -1。其他的图片其实就是6 5 4 3 2 1 0 -1 -2 -3 -4 -5 -6 -7 -8 -9 -10；除开1 0 -1 ，其他的scale都换算到 0。剩下的1 0 -1 换算到scale为 .8 0 .8)*/
+	}
+})
+</script>
+<script>
+$('.like').on('click',function() {
+	$(this).find('span').each(function(index,item) {
+		if($(item).css('top') == -200 + 'px') {
+			$(item).remove();
+		}
+	});
+
+	$(this).find('strong').each(function(index,item) {
+		if($(item).css('top') == -200 + 'px') {
+			$(item).remove();
+		}
+	});
+
+	$(this).append($(`<span></span><strong></strong>`));
+	$(this).find('span').css('backgorund','orange');
+	$(this).find('span').delay(100).animate({
+		left: -Math.floor(120*Math.random()),
+		top: -200,
+		opacity: 0
+	},2000);
+	$(this).find('strong').animate({
+		left: -Math.floor(60*Math.random()),
+		top: -200,
+		opacity: 0
+	},2000);
+});
+</script>
+</html>

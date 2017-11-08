@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jQ懒加载图片</title>
+</head>
+<style>
+	div {
+		width: 300px;
+		height: 60px;
+		margin: 0 auto;
+		text-align: center;
+	}
+	div a {
+		display: inline-block;
+		line-height: 60px;
+	}
+	.show {
+		color: gold;
+	}
+	ul {
+		position: relative;
+		width: 300px;
+		height: 300px;
+		list-style: none;
+		padding: 0;
+		margin: 0 auto;
+	}
+	ul li {
+		position: absolute;
+		z-index: 3;
+		width: 100%;
+		height:  100%;
+		top: 0;
+		left: 0;
+	}
+	ul li:nth-of-type(2) {
+		z-index: 2;
+	}
+	ul li:nth-of-type(3) {
+		z-index: 1;
+	}
+</style>
+<body>
+	<div>
+		<a href="javascript:;" class="show">第一个</a>
+		<a href="javascript:;">第二个</a>
+		<a href="javascript:;">第三个</a>
+	</div>
+	<ul class="list">
+		
+	</ul>
+</body>
+<script src="js/jquery-1.11.2.js"></script>
+<script>
+var images = ['img/1.jpg','img/2.jpg','img/3.jpg'];
+	$.each(images, function(index,item) {
+		$('<li>').html($('<img>').attr('src',images[index])).appendTo($('.list'));
+	});
+
+	$('a').on('click.a',function() {
+
+		if($(this).attr('class') == 'show') {
+			return;
+		}
+
+		$('a').attr('class','');
+		$('li').each(function(index,item) {
+			$('li').animate({
+				top: 20,
+				opacity: 0
+			},300,'linear')
+		});
+		
+		console.log($(this));
+		$(this).attr('class','show');
+		$('li').eq($(this).index('a')).animate({
+			top: 0,
+			opacity: 1
+		},300,'linear');
+		
+	});
+</script>
+<script>
+$(function() {
+    var deskTime = '1.28分钟';
+    var toBeZero = [];
+    var timer = setTimeout(function() {
+       	deskTime = deskTime.match(/\d+/g).join('.');
+       	if(deskTime == 0) {
+       		return;
+       	}
+       	// deskTime = deskTime / 100 * 60;//100进制转换60进制
+       	deskTime = deskTime * 60;//转成秒
+       	
+       	// console.log(0.0720 / 86400,999999999);
+
+       	var day = parseInt(deskTime / 86400).toFixed(0);//取天数
+       	var hours = parseInt((deskTime % 86400) / 3600);//取天数后余数
+       	var minutes = parseInt((deskTime % 3600) / 60)//取小时后余数
+		var seconds = Math.round((deskTime % 60).toFixed(2));//取分钟后余数
+		var mSeconds = (deskTime % 60) / 1000; 
+		// console.log('hours',hours,'minutes',minutes,'seconds',seconds);
+		let totalTime = [day,hours,minutes,seconds];
+		let timeDetail = ['天','小时','分钟','秒'];
+		console.log(totalTime);
+
+		deskTime = '';
+
+		$.each(totalTime,function(index,item) {
+			if(totalTime.indexOf(0,index) > -1) {
+				toBeZero.push(totalTime.indexOf(0,index));
+			}
+			// console.log(item != 0 && index !=toBeZero[index]);
+			if(item != 0 && index != toBeZero[index]) {
+
+				deskTime += item + timeDetail[index];
+			}
+		});
+
+		console.log(deskTime);
+    },100);
+});
+</script>
+<script>
+// $(function() {
+//     var deskTime = '0.22分钟';
+//     var timer = setTimeout(function() {
+//         // var deskTime = $('.desk.time').html();
+//         deskTime = deskTime.match(/\d+/g).join('.');
+
+//         deskTime = deskTime.indexOf('.') > 0?(deskTime / 100 * 60).toFixed(2).split('.'):[deskTime]; 
+
+//         var bigNum = deskTime[0];//0
+//         var smallNum = deskTime[1];//12
+//         var hours = 0;
+        
+//         if(deskTime.length == 1 && deskTime[0] == 0) {
+//             return;
+//         }
+
+//         if(bigNum > 0) {
+//             addHour();//递归判断日期
+
+//             function addHour() {
+//                 if(bigNum >= 60) {
+//                     bigNum = bigNum - 60;
+//                     hours++;
+//                     addHour();
+//                 } else {
+//                     return;
+//                 }
+//             }
+
+//             if(hours > 0) {
+//                 if(smallNum > 0) {
+//                     deskTime = hours + '小时' + bigNum + '分钟' + smallNum + '秒';
+//                 } else {
+//                     deskTime = hours + '小时' + bigNum + '分钟';
+//                     if(bigNum == 0) {
+//                         deskTime = hours + '小时';
+//                     }
+//                 }
+//             } else {
+//                 if(smallNum > 0) {
+//                     deskTime = bigNum + '分钟' + smallNum + '秒';
+//                 } else {
+//                     deskTime = bigNum + '分钟';
+//                 }
+//             }
+//         } else {
+//             if(1) {
+
+//             }
+//             deskTime = smallNum + '秒';
+//         }
+
+//         console.log(deskTime);
+//         $('.desk.time').html(deskTime);
+//     },8000);
+// });
+</script>
+<!-- <script>
+ var toBeZero = [];
+    var timer = setTimeout(function() {
+        var deskTime = $('.desk.times').html();
+        console.log(deskTime);
+        deskTime = deskTime.match(/\d+/g).join('.');
+        if(deskTime == 0) {
+            return;
+        }
+
+        deskTime = deskTime / 100 * 60;//100进制转换60进制
+        deskTime = deskTime * 60;//转成秒
+
+        var day = parseInt(deskTime / 86400).toFixed(0);//取天数
+        var hours = parseInt((deskTime % 86400) / 3600);//取天数后余数
+        var minutes = parseInt((deskTime % 3600) / 60)//取小时后余数
+        var seconds = (deskTime % 60).toFixed(2);//取分钟后余数
+        var mSeconds = (deskTime % 60) / 1000; 
+        // console.log('hours',hours,'minutes',minutes,'seconds',seconds);
+        let totalTime = [day,hours,minutes,seconds];
+        let timeDetail = ['天','小时','分钟','秒'];
+        // console.log(totalTime);
+
+        deskTime = '';
+
+        $.each(totalTime,function(index,item) {
+            if(totalTime.indexOf(0,index) > -1) {
+                toBeZero.push(totalTime.indexOf(0,index));
+            }
+
+            if(item != 0 && index != toBeZero[index]) {
+
+                deskTime += item + timeDetail[index];
+            }
+        });
+
+        $('.desk.times').html(deskTime);
+    },7000);
+</script> -->
+</html>

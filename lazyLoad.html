@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jQ懒加载图片</title>
+</head>
+<style>
+	ul {
+		width: 100;
+		height: auto;
+		list-style: none;
+	}
+	ul li {
+		width: 100%;
+		height: auto;
+		margin-top: 160px;
+	}
+	ul li img {
+		vertical-align: top;
+		width: 300px;
+		height: 300px;
+	}
+	ul li:nth-of-type(1) {
+		margin: 0;
+	}
+</style>
+<body>
+	<ul class="list">
+		
+	</ul>
+</body>
+<script src="js/jquery-1.11.2.js"></script>
+<script>
+var images = ['img/1.jpg','img/2.jpg','img/3.jpg','img/4.jpg','img/5.jpg','img/6.jpg','img/7.jpg','img/8.jpg','img/9.jpg','img/10.jpg','img/11.jpg'];
+
+	$.each(images,(index) => {
+		$('<li>').html($('<img>').attr('_src',images[index])).appendTo($('.list'));;
+	});
+
+	toShowLazy();
+	$(window).scroll( toShowLazy );
+
+	function toShowLazy() {
+		var windowH = $(window).height() + $(document).scrollTop();
+
+	// console.log(windowH);
+	// console.log($('img').get(5).getBoundingClientRect().top);
+
+		$('img').each((index,item) => {
+			if($(item).offset().top < windowH) {
+				$(item).attr('src',$(item).attr('_src'));
+			}
+		});
+		// $('img').each((index,item) => {
+		// 	if($('img').get(index).getBoundingClientRect().top < $(window).height()) {
+		// 		$(item).attr('src',$(item).attr('_src'));
+		// 	}
+		// });
+	}
+</script>
+</html>

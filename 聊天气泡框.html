@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>气泡框</title>
+</head>
+<style>
+body {
+	margin: 0;
+}
+.wrap {
+	width: 400px;
+	margin: 0 auto;
+	height: 600px;
+	background: #EBEBEB;
+	box-shadow: 1px 1px 3px #999;
+	box-sizing: border-box;
+	padding: 20px 30px;
+}
+.text {
+	position: relative;
+	display: inline-block;
+	border: 0;
+	resize: none;
+	width: auto;
+	max-width: 200px;
+	height: auto;
+	z-index: 2;
+	padding: 5px 10px;
+	font: 14px '微软雅黑';
+	/*line-height: 24px;*/
+	box-sizing: border-box;
+	background: #fff;
+	border-radius: 5px;
+	box-shadow: 1px 2px 3px #EBEBEB;
+}
+.arrow {
+	position: absolute;
+	top: 10px;
+	left: -6px;
+	z-index: 1;
+	border: 6px solid #fff;
+	box-shadow: 0px 2px 2px #EBEBEB;
+	border-color: transparent transparent #fff #fff;
+	transform: rotate(45deg);
+}
+</style>
+<body>
+	<div class="wrap">
+		<div contenteditable="true" class="text">双11为了什么
+		<span class="arrow"></span>
+		</div>
+	</div>
+	<ul class="list">
+		
+	</ul>
+</body>
+<script src="./js/jquery-1.11.2.js"></script>
+<script>
+	var arr = [1,0.02,1.3,1.68,0.15,1.33,0.06,1.98,1.86,2];
+	$.each(arr,function(index,item){
+		$('<li>'+ arr[index] +'</li>').appendTo($('.list'));
+	});
+		$('li').each(function(i,ele) {
+			console.log(i);
+			turnTime($('li').eq(i),1);
+		});
+	    function turnTime(classNames,durations=0) {
+	        var toBeZero = [];
+	        var timer = setTimeout(function() {
+	            var deskTime = $(classNames).html();
+	            // console.log(deskTime);
+	            deskTime = deskTime && deskTime.match(/\d+/g).join('.');
+	            /*页面0分钟就不显示*/
+	            if(deskTime == 0) {
+	                return;
+	            }
+
+	            if(durations == 0) {//判断当前页面用的是100进制还是60进制
+	                deskTime = deskTime / 100 * 60;//100进制转换60进制
+	            }
+	            deskTime = deskTime * 60;//转成秒
+
+	            var day = parseInt(deskTime / 86400).toFixed(0);//取天数
+	            var hours = parseInt((deskTime % 86400) / 3600);//取天数后余数
+	            var minutes = parseInt((deskTime % 3600) / 60)//取小时后余数
+	            var seconds = (deskTime % 60).toFixed(2);//取分钟后余数
+	            var mSeconds = (deskTime % 60) / 1000; 
+	            // console.log('hours',hours,'minutes',minutes,'seconds',seconds);
+	            let totalTime = [day,hours,minutes,seconds];
+	            let timeDetail = ['天','小时','分钟','秒'];
+	            // console.log(totalTime);
+
+	            deskTime = '';//每次清空
+
+	            $.each(totalTime,function(index,item) {
+	                if(totalTime.indexOf(0,index) > -1) {
+	                    toBeZero.push(totalTime.indexOf(0,index));
+	                }
+
+	                if(item != 0 && index != toBeZero[index]) {
+
+	                    deskTime += item + timeDetail[index];
+	                }
+	            });
+
+	            $(classNames).html(deskTime);
+	        },150);
+	    }
+	
+</script>
+</html>
